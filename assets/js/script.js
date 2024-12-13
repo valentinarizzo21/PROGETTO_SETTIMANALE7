@@ -68,9 +68,9 @@ btnSave.addEventListener('click', async (e) => {
 const newestUrl = new URLSearchParams(window.location.search);
 const productId = newProduct.get('_id');
 /*async function modifyProduct() {
-
     try{
-        let response = await fetch(urlProducts + productId)
+        let response = await fetch(urlProducts + productId);
+
     }
     
 }*/
