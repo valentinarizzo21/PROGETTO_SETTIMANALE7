@@ -1,39 +1,47 @@
+//PAGINA PRODOTTI
+
+const urlProducts = `https://striveschool-api.herokuapp.com/api/product/`;
+let products = [];
 const myName = document.getElementById("name");
 const brand = document.getElementById("brand");
 const price = document.getElementById("price");
-const urlImage = document.getElementById("urlImage");
+const imageUrl = document.getElementById("imageUrl");
 const description = document.getElementById("description");
-const empty = document.getElementById("empty");
-const formContent = document.getElementById("formContent");
-let url = "https://striveschool-api.herokuapp.com/api/product/";
-let data;
-let productsList = [];
+const btnSave = document.getElementById("btnSave");
 
-async function getFetch() {
+async function getProducts() {
   try {
-    let response = await fetch(url, {
+    let response = await fetch(urlProducts, {
       headers: {
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzViZjc3OWQyMjA3MTAwMTVkZTJmM2UiLCJpYXQiOjE3MzQwODAzNzcsImV4cCI6MTczNTI4OTk3N30.hImE9tqQIQhZfVqO6KxIKNjvO4pVLUcMO03ML5VoDV4",
       },
     });
     data = await response.json();
-    productsList = data;
+    products = data;
     console.log(data);
-    if (productsList.length > 0) {
-      printProducts();
-    } else {
-      empty.innerText = "Non sono state trovate corrispondenze";
-      return;
-    }
+    printProducts();
   } catch (error) {
     console.log(error);
   }
 }
+getProducts();
 
-getFetch();
+const newProduct = {
+  name: "",
+  description: "",
+  brand: "",
+  imageUrl: "",
+  price: 0,
+};
 
-/*class Product {
+/*newProduct.name = myName.value;
+newProduct.description = description.value;
+newProduct.brand = brand.value;
+newProduct.imageUrl = imageUrl.value;
+newProduct.price = price.value;*/
+
+class Product {
   constructor(_name, _description, _brand, _imageUrl, _price) {
     this.name = _name;
     this.description = _description;
@@ -41,61 +49,29 @@ getFetch();
     this.imageUrl = _imageUrl;
     this.price = _price;
   }
-}*/
-
-/*async function postFetch() {
-  const newProduct = {
-    name: "",
-    description: "",
-    brand: "",
-    imageUrl: "",
-    price: 0,
-  };
-  newProduct.name = myName.value;
-  newProduct.description = description.value;
-  newProduct.brand = brand.value;
-  newProduct.imageUrl = urlImage.value;
-  newProduct.price = parseFloat(price.value);
-  console.log(newProduct);
-  try {
-    let response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(newProduct),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzViZjc3OWQyMjA3MTAwMTVkZTJmM2UiLCJpYXQiOjE3MzQwODAzNzcsImV4cCI6MTczNTI4OTk3N30.hImE9tqQIQhZfVqO6KxIKNjvO4pVLUcMO03ML5VoDV4",
-      },
-    });
-    if (response.ok) {
-      data = await response.json();
-      productsList.push(data);
-      //console.log(data);
-    } else {
-      throw new Error("not defined");
-    }
-  } catch (error) {
-    console.log(error);
-  }
 }
 
-postFetch();*/
+console.log(newProduct);
 
 function printProducts() {
   let row = document.getElementById("row");
-  empty.innerText = "";
   row.innerHTML = "";
-  productsList.forEach((product) => {
-    let template = `
+  for (let i = 0; i < products.length; i++) {
+    let newProduct = new Product(
+      products[i].name,
+      products[i].description,
+      products[i].brand,
+      products[i].imageUrl,
+      products[i].price
+    );
+    let colProduct = `
     <div class="col-md-4">
         <div class="card mb-4 shadow-sm">
-            <img src="${product.imageUrl}" style="width: 100%" />
-        </a>
+            <img src="${newProduct.imageUrl}" style="width: 100%" />
             <div class="card-body">
-                <h5 class="card-title">${product.name}</h5>
-            </a>
+                <h5 class="card-title">${newProduct.name}</h5>
                 <p class="card-text">
-                ${product.description}
+                ${newProduct.description}
                 </p>
                 <div
                 class="d-flex justify-content-between align-items-center"
@@ -103,19 +79,15 @@ function printProducts() {
                 <div class="btn-group">
                     <button
                         type="button"
-                        class="btn btn-sm btn-outline-secondary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                        onclick="fillImageInModal(this)"
+                        class="btn btn-sm btn-outline-secondary btnModify"
                     >
-                        <a href="home.html" class= "text-decoration-none text-black">Modify </a>
+                    Modifica
                     </button>
                     <button
                     type="button"
                     class="btn btn-sm btn-outline-secondary"
-                    onclick="hideColumn(this)"
                     >
-                    <a href="description.html" class= "text-decoration-none text-black"> View More </a>
+                    Scopri di più
                     </button>
                 </div>
                 </div>
@@ -123,8 +95,17 @@ function printProducts() {
         </div>
     </div>
     `;
-    row.innerHTML += template;
-    console.log(product);
-  });
-  //console.log(data)
+
+    row.innerHTML += colProduct;
+    const btnModify = document.querySelectorAll(".btnModify");
+
+    btnModify[i].addEventListener("click", (e) => {
+      e.preventDefault();
+      let primoUrl = "home.html";
+      let secondoUrl = `${primoUrl}?_id=${products[i]._id}`;
+      window.location.href = secondoUrl;
+      console.log("ciao");
+    });
+  }
+  //console.log('ciao') qua ci arriva
 }
