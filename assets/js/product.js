@@ -65,7 +65,7 @@ function printProducts() {
       products[i].price
     );
     let colProduct = `
-    <div class="col-md-4">
+    <div class="col-md-4" id = "${products[i]._id}">
         <div class="card mb-4 shadow-sm">
             <img src="${newProduct.imageUrl}" style="width: 100%" />
             <div class="card-body">
@@ -80,6 +80,7 @@ function printProducts() {
                     <button
                         type="button"
                         class="btn btn-sm btn-outline-secondary btnModify"
+                        
                     >
                     Modifica
                     </button>
@@ -97,14 +98,39 @@ function printProducts() {
     `;
 
     row.innerHTML += colProduct;
-    const btnModify = document.querySelectorAll(".btnModify");
 
+
+    // let col = document.querySelector(`.col-md-4:nth-of-type(${i+1})`);
+    // //const btnModify = row.querySelector(".btnModify");
+    // let btnModify = col.querySelector('.btnModify');
+    // btnModify.addEventListener("click", (e) => {
+    //   e.preventDefault();
+    //   let primoUrl = "home.html";
+    //   let secondoUrl = `${primoUrl}?_id=${products[i]._id}`;
+    //   window.location.href = secondoUrl;
+    //   console.log('cliccato');
+    // });
+    //console.log(btnModify)
+  }
+  const btnModify = row.querySelectorAll(".btnModify");
+  //console.log(btnModify);
+  // btnModify.forEach((e) => {
+  //   e.addEventListener("click", (e) => {
+  //       e.preventDefault();
+  //       let primoUrl = "home.html";
+  //       let secondoUrl = `${primoUrl}?_id=${products[i]._id}`;
+  //       window.location.href = secondoUrl;
+  //       console.log('cliccato');
+  //     });
+  // });
+
+  for (let i = 0; i < btnModify.length; i++){
     btnModify[i].addEventListener("click", (e) => {
       e.preventDefault();
       let primoUrl = "home.html";
       let secondoUrl = `${primoUrl}?_id=${products[i]._id}`;
       window.location.href = secondoUrl;
-      console.log("ciao");
+      console.log('cliccato');
     });
   }
   //console.log('ciao') qua ci arriva
